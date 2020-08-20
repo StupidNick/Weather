@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить город{% endblock %}
+
+{% block content %}
+
+	<h1 style="float: left;">{{weather}}&deg; C</h1>
+
+	<h1 style="float: left; width: 15%; text-align: right;">Сейчас у тебя</h1>
+	<div style="clear: left"></div>
+
+	{% load auth_extras %}
+	{% if request.user|has_group:"Админ" %}
+	<form action="{% url 'weatherManager:edit' weather.id %}" method="POST">
+ 		
+ 		{% csrf_token %}
+
+ 		<input type="text" name="temperature" placeholder='"Правильная" температура...'><br><br>
+ 		<button type="submit">Изменить температуру</button>
+ 	</form> 
+ 	{% endif %}
+ 	<br><br>
+ 	<a href="{% url 'weatherManager:index' %}">Нет, пожалуй, вы лучше знаете что там за окном(сбежать с позором)</a>
+
+{% endblock %}

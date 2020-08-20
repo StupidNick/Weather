@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{weather.city}}{% endblock %}
+
+{% block link_css %}
+	
+	<link rel="stylesheet" type="text/css" href="{% static 'css/detail_style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+	<h1>{{weather.city}}</h1>
+
+	<form action="{% url 'weatherManager:filter_temperature' weather.id%}" method="POST">
+		
+		{% csrf_token %}
+
+		<p>Фильтровать по:</p>
+		<input type="date" name="data_filter1"><input style="margin-left: 2%" type="date" name="data_filter2"> - <input type="date" name="data_filter3"><br><br>
+		<button type="submit">Применить фильтр</button>
+
+	</form>
+
+	{% if filter1 %}
+
+		{% for c in filter1 %}
+			<br><br><strong><a href="{% url 'weatherManager:edit_temperature' c.id %}">{{c.temperature}}&deg; C</a></strong>
+			<p>{{c.date}}</p><br><br>
+		{% endfor %}
+
+	{% elif temperature_data %}
+
+		{% for c in temperature_data %}
+			<br><br><strong><a href="{% url 'weatherManager:edit_temperature' c.id %}">{{c.temperature}}&deg; C</a></strong>
+			<p>{{c.date}}</p><br><br>
+		{% endfor %}
+
+	{% else %}
+
+	Температура для этого города или дня пока не добавлена. Если у вас есть градусник, расскажите всем что он сейчас показывает:)<br><br>
+
+	{% endif %}
+
+	{% load auth_extras %}
+	{% if request.user|has_group:"Админ" %}
+ 	<form action="{% url 'weatherManager:add_temperature' weather.id%}" method="POST">
+ 		
+ 		{% csrf_token %}
+
+ 		<input type="number" required placeholder="Температура" name="temperature"><br><br>
+ 		<input type="date" required name="date" min="2020-07-01"><br><br>
+ 		<button type="submit">Добавить температуру</button>
+ 	</form> 
+ 	{% endif %}
+ 	<br><br><a href="{% url 'weatherManager:index' %}">Вернуться на главную страницу</a>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Все города{% endblock %}
+
+{% block content %}
+
+	
+
+	{% if cityes_list %}
+	
+		{% for a in cityes_list %}
+			<a href="{% url 'weatherManager:detail' a.id %}" >{{a.city}}</a><br>
+		{% endfor %}
+
+	{% else %}
+		Пока здесь нет городов, будьте первым, кто добавит свой =)
+	{% endif %}
+
+	<br><a href="{% url 'weatherManager:add_city' %}" >Добавить город</a>
+
+{% endblock %}

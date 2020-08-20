@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить город{% endblock %}
+
+{% block content %}
+
+	<form action="{% url 'weatherManager:create_city' %}" method="POST">
+ 		
+ 		{% csrf_token %}
+
+ 		<input type="text" name="city"><br><br>
+ 		<button type="submit">Добавить город</button>
+ 	</form> 
+ 	<br><br>
+ 	<a href="{% url 'weatherManager:index' %}">Я передумал, я не знаю больше городов</a>
+
+{% endblock %}
